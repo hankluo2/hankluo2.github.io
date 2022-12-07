@@ -6,7 +6,7 @@
   <link href="http://hankislolo.com/atom.xml" rel="self"/>
   
   <link href="http://hankislolo.com/"/>
-  <updated>2022-12-07T09:03:20.166Z</updated>
+  <updated>2022-12-07T15:21:53.605Z</updated>
   <id>http://hankislolo.com/</id>
   
   <author>
@@ -17,46 +17,13 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Hello World</title>
-    <link href="http://hankislolo.com/2022/12/07/hello-world/"/>
-    <id>http://hankislolo.com/2022/12/07/hello-world/</id>
-    <published>2022-12-07T09:03:20.166Z</published>
-    <updated>2022-12-07T09:03:20.166Z</updated>
+    <title>VAD Research Logs</title>
+    <link href="http://hankislolo.com/2022/12/07/VAD-Research-Logs/"/>
+    <id>http://hankislolo.com/2022/12/07/VAD-Research-Logs/</id>
+    <published>2022-12-07T09:33:16.000Z</published>
+    <updated>2022-12-07T15:21:53.605Z</updated>
     
-    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt; for</summary>
-      
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>test again</title>
-    <link href="http://hankislolo.com/2022/12/07/test-again/"/>
-    <id>http://hankislolo.com/2022/12/07/test-again/</id>
-    <published>2022-12-07T08:57:47.000Z</published>
-    <updated>2022-12-07T08:58:08.966Z</updated>
-    
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>VAD Reviews</title>
-    <link href="http://hankislolo.com/2022/12/07/VAD-Reviews/"/>
-    <id>http://hankislolo.com/2022/12/07/VAD-Reviews/</id>
-    <published>2022-12-07T08:00:53.000Z</published>
-    <updated>2022-12-07T08:54:13.886Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="关于视频异常检测的核心问题"><a href="#关于视频异常检测的核心问题" class="headerlink" title="关于视频异常检测的核心问题"></a>关于视频异常检测的核心问题</h3><hr><p>在过去的实验研究当中发现视频异常检测的具体实现有很多现实难以解决的问题。但是很多文章声称的具体方法却缺乏代码实现。本文对过去的文献加以介绍并总结，并添加一些实验中发现的问题，以启发后续的工作继续深入。</p><h4 id="MIL的一般方法"><a href="#MIL的一般方法" class="headerlink" title="MIL的一般方法"></a>MIL的一般方法</h4><p>VAD可以抽象为一个典型的多示例学习模型。由于</p>]]></content>
+    <content type="html"><![CDATA[<h3 id="关于视频异常检测的核心问题"><a href="#关于视频异常检测的核心问题" class="headerlink" title="关于视频异常检测的核心问题"></a>关于视频异常检测的核心问题</h3><hr><p>在过去的实验研究当中发现视频异常检测的具体实现有很多现实难以解决的问题。但是很多文章声称的具体方法却缺乏代码实现。本文对过去的文献加以介绍并总结，并添加一些实验中发现的问题，以启发后续的工作继续深入。</p><h4 id="MIL-Multiple-Instance-Learning-的一般方法"><a href="#MIL-Multiple-Instance-Learning-的一般方法" class="headerlink" title="MIL (Multiple Instance Learning) 的一般方法"></a>MIL (Multiple Instance Learning) 的一般方法</h4><p>VAD可以抽象为一个典型的多示例学习模型。由于感兴趣的正样本视频片段只占一个视频样本的一个小部分，因此可以将一个视频当作一个包 (bag) ，每个包根据是否含有正片段示例 (instance) 给定一个粗粒度的标签。对于一个典型的MIL问题，解决这个方法通常为<strong>迭代优化（alternative optimization)。</strong>也就是说，我们先假设已经知道了所有样本的标记，那么就可以通过某种监督学习的方法得到一个分类模型，通过这个模型我们可以对每个训练样本进行预测，然后更新它们的标记，我们又可以拿这一次新得到的标记重新训练分类模型了。所以整个优化过程分为两部分：监督学习，标记更新<sup><a href="#fn_1" id="reffn_1">1</a></sup>。值得注意的是，在训练的过程中：</p><ol><li>第一点， 训练监督学习的模型的时候，只从正样本包里挑选被预测的“最像正确”(也就是分类得分最高)的那一个，正样本包里面<strong>其他的</strong>样本，不管预测出来是正的还是负的<strong>都不要了</strong>。这是因为，其实多示例的问题也可以描述为，正样本包里面“最正确”的一个样本标记是正的，跟其他样本无关。所以，这种选择策略恰恰是符合问题定义的。<strong>（选最容易分类的，因为可能只有一个）</strong></li><li>第二点，如果负样本足够多的话，可以只挑选每个负样本包里面被预测“最像正确”的一个样本作为负样本进行训练，这样子的负样本也叫做hard sample或者most violated sample。实践上来说，它们对于模型快速收敛是最有效的。<strong>（选最难分类的，因为所有样本都是负的，并且要使模型能够有区分度，这种观点可以参考支持向量机中的支持向量的观点）</strong><sup><a href="#fn_1" id="reffn_1">1</a></sup></li></ol><p>因此，对于一个经典的MIL问题，通常的算法实现过程分为如下步骤：</p><p>多示例学习：</p><p>输入：正包，负包</p><p>输出： 分类函数 $f$</p><p>将每个标记包中的样本初始化为<strong>包的标记</strong>，初始化集合 $U$ 为空，将所有样本 (instance) 加入样本集 $U$</p><p>重复下面的过程：</p><ul><li>取 $U$ 中所有样本 $s_i$ 以及标记 $y$ 训练得到一个分类函数 $f$</li><li>利用 $f$ 预测所有样本的标记 $\hat{y}$</li><li>清空 $U$</li><li>对于每个正标记包，选取 $f$ 预测得分最高的样本 $s_{p_max}$ 加入集合 $U$（选最容易分类的一个）</li><li>对于每个负标记包，选取 $f$ 预测得分最高的样本 $s_{n_max}$ 加入集合 $U$（选最难分类的一个或多个）</li></ul><p>直到 $U$ 中不包含正样本为止.</p><p>返回 $f$.</p><p>从以上一般MIL的求解范式来看，示例（instance, 以上称为样本，为方便讨论以下将其称为“示例”）需要满足几个特征才适合于以上迭代优化的模式：</p><ul><li>Permutation-Invariance. 交换示例的位置不会对打分造成影响（打分与位置无关）</li><li>所有的示例都应当具有相同的权重</li></ul><p>因此，对于视频异常检测任务而言，它可以使用MIL来进行建模，但是构建出的包质量会影响到预测函数 $f$ 的表现。具体而言，用MIL对VAD的建模天然采用一个完整的视频 (video) 作为一个包 (bag) ，视频的部分片段 (clip) 作为示例 (instance) 。但与标准的MIL不同的是，这里的instances之间是具有时序关系的，而且随着采样时间的变化</p><blockquote id="fn_1"><sup>1</sup>. <a href="https://zhuanlan.zhihu.com/p/377220948">https://zhuanlan.zhihu.com/p/377220948</a><a href="#reffn_1" title="Jump back to footnote [1] in the text."> &#8617;</a></blockquote>]]></content>
     
     
       
