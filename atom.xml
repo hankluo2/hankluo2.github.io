@@ -36,4 +36,59 @@
     
   </entry>
   
+  <entry>
+    <title>test again</title>
+    <link href="http://hankislolo.com/2022/12/07/test-again/"/>
+    <id>http://hankislolo.com/2022/12/07/test-again/</id>
+    <published>2022-12-07T08:57:47.000Z</published>
+    <updated>2022-12-07T08:58:08.966Z</updated>
+    
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>VAD Reviews</title>
+    <link href="http://hankislolo.com/2022/12/07/VAD-Reviews/"/>
+    <id>http://hankislolo.com/2022/12/07/VAD-Reviews/</id>
+    <published>2022-12-07T08:00:53.000Z</published>
+    <updated>2022-12-07T08:54:13.886Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="关于视频异常检测的核心问题"><a href="#关于视频异常检测的核心问题" class="headerlink" title="关于视频异常检测的核心问题"></a>关于视频异常检测的核心问题</h3><hr><p>在过去的实验研究当中发现视频异常检测的具体实现有很多现实难以解决的问题。但是很多文章声称的具体方法却缺乏代码实现。本文对过去的文献加以介绍并总结，并添加一些实验中发现的问题，以启发后续的工作继续深入。</p><h4 id="MIL的一般方法"><a href="#MIL的一般方法" class="headerlink" title="MIL的一般方法"></a>MIL的一般方法</h4><p>VAD可以抽象为一个典型的多示例学习模型。由于</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h3 id=&quot;关于视频异常检测的核心问题&quot;&gt;&lt;a href=&quot;#关于视频异常检测的核心问题&quot; class=&quot;headerlink&quot; title=&quot;关于视频异常检测的核心问题&quot;&gt;&lt;/a&gt;关于视频异常检测的核心问题&lt;/h3&gt;&lt;hr&gt;
+&lt;p&gt;在过去的实验研究当中发现视频异常检测的具体</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Say Hi to Roxy</title>
+    <link href="http://hankislolo.com/2022/12/07/Say-Hi-to-Roxy/"/>
+    <id>http://hankislolo.com/2022/12/07/Say-Hi-to-Roxy/</id>
+    <published>2022-12-07T05:36:06.000Z</published>
+    <updated>2022-12-07T07:03:37.335Z</updated>
+    
+    <content type="html"><![CDATA[<p>Hello, Roxy! This is 4 U!<br>Hank is Lolo.</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;Hello, Roxy! This is 4 U!&lt;br&gt;Hank is Lolo.&lt;/p&gt;
+</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
 </feed>
