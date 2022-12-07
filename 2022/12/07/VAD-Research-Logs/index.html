@@ -1,35 +1,71 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> VAD Research Logs · Hank Is Lolo</title><meta name="description" content="VAD Research Logs - Hank"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/prontera.css"><link rel="search" type="application/opensearchdescription+xml" href="http://hankislolo.com/atom.xml" title="Hank Is Lolo"><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Hank Is Lolo" type="application/atom+xml">
-</head><body><header class="feature-header"><nav class="component-nav"><ul><div class="logo-container"><a href="/"><h2 class="title">Hank Is Lolo</h2></a></div><a href="/" target="_self" class="li component-nav-item"><p>INDEX</p></a><a href="/archives" target="_self" class="li component-nav-item"><p>ARCHIVES</p></a><ul class="shortcut-icons"><a href="https://github.com/hankluo2" target="_blank"><img src="/images/github.svg" class="icon"></a><a href="/atom.xml" target="_blank"><img src="/images/rss.svg" class="icon"></a></ul></ul></nav></header><main class="container"><div id="post-container"><div class="post"><article class="post-block"><h1 class="post-title">VAD Research Logs</h1><div class="post-info">Dec 7, 2022</div><div class="post-content"><h3 id="关于视频异常检测的核心问题"><a href="#关于视频异常检测的核心问题" class="headerlink" title="关于视频异常检测的核心问题"></a>关于视频异常检测的核心问题</h3><hr>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> VAD Research Logs · Hank Is Lolo</title><meta name="description" content="VAD Research Logs - Hank"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/prontera.css"><link rel="search" type="application/opensearchdescription+xml" href="http://hankislolo.com/atom.xml" title="Hank Is Lolo"><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Hank Is Lolo" type="application/atom+xml">
+</head><body><header class="feature-header"><nav class="component-nav"><ul><div class="logo-container"><a href="/"><h2 class="title">Hank Is Lolo</h2></a></div><a href="/" target="_self" class="li component-nav-item"><p>INDEX</p></a><a href="/archives" target="_self" class="li component-nav-item"><p>ARCHIVES</p></a><ul class="shortcut-icons"><a href="https://github.com/hankluo2" target="_blank"><img src="/images/github.svg" class="icon"></a><a href="/atom.xml" target="_blank"><img src="/images/rss.svg" class="icon"></a></ul></ul></nav></header><main class="container"><div id="post-container"><div class="post"><article class="post-block"><h1 class="post-title">VAD Research Logs</h1><div class="post-info">Dec 7, 2022</div><div class="post-content"><h3 id="关于视频异常检测的核心问题">关于视频异常检测的核心问题</h3>
+<hr>
 <p>在过去的实验研究当中发现视频异常检测的具体实现有很多现实难以解决的问题。但是很多文章声称的具体方法却缺乏代码实现。本文对过去的文献加以介绍并总结，并添加一些实验中发现的问题，以启发后续的工作继续深入。</p>
-<h4 id="MIL-Multiple-Instance-Learning-的一般方法"><a href="#MIL-Multiple-Instance-Learning-的一般方法" class="headerlink" title="MIL (Multiple Instance Learning) 的一般方法"></a>MIL (Multiple Instance Learning) 的一般方法</h4><p>VAD可以抽象为一个典型的多示例学习模型。由于感兴趣的正样本视频片段只占一个视频样本的一个小部分，因此可以将一个视频当作一个包 (bag) ，每个包根据是否含有正片段示例 (instance) 给定一个粗粒度的标签。对于一个典型的MIL问题，解决这个方法通常为<strong>迭代优化（alternative optimization)。</strong>也就是说，我们先假设已经知道了所有样本的标记，那么就可以通过某种监督学习的方法得到一个分类模型，通过这个模型我们可以对每个训练样本进行预测，然后更新它们的标记，我们又可以拿这一次新得到的标记重新训练分类模型了。所以整个优化过程分为两部分：监督学习，标记更新<sup><a href="#fn_1" id="reffn_1">1</a></sup>。值得注意的是，在训练的过程中：</p>
-<ol>
-<li>第一点， 训练监督学习的模型的时候，只从正样本包里挑选被预测的“最像正确”(也就是分类得分最高)的那一个，正样本包里面<strong>其他的</strong>样本，不管预测出来是正的还是负的<strong>都不要了</strong>。这是因为，其实多示例的问题也可以描述为，正样本包里面“最正确”的一个样本标记是正的，跟其他样本无关。所以，这种选择策略恰恰是符合问题定义的。<strong>（选最容易分类的，因为可能只有一个）</strong></li>
-<li>第二点，如果负样本足够多的话，可以只挑选每个负样本包里面被预测“最像正确”的一个样本作为负样本进行训练，这样子的负样本也叫做hard sample或者most violated sample。实践上来说，它们对于模型快速收敛是最有效的。<strong>（选最难分类的，因为所有样本都是负的，并且要使模型能够有区分度，这种观点可以参考支持向量机中的支持向量的观点）</strong><sup><a href="#fn_1" id="reffn_1">1</a></sup></li>
+<h4 id="mil-multiple-instance-learning-的一般方法">MIL (Multiple
+Instance Learning) 的一般方法</h4>
+<p>VAD可以抽象为一个典型的多示例学习模型。由于感兴趣的正样本视频片段只占一个视频样本的一个小部分，因此可以将一个视频当作一个包
+(bag) ，每个包根据是否含有正片段示例 (instance)
+给定一个粗粒度的标签。对于一个典型的MIL问题，解决这个方法通常为<strong>迭代优化（alternative
+optimization)。</strong>也就是说，我们先假设已经知道了所有样本的标记，那么就可以通过某种监督学习的方法得到一个分类模型，通过这个模型我们可以对每个训练样本进行预测，然后更新它们的标记，我们又可以拿这一次新得到的标记重新训练分类模型了。所以整个优化过程分为两部分：监督学习，标记更新<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>。值得注意的是，在训练的过程中：</p>
+<ol type="1">
+<li>第一点，
+训练监督学习的模型的时候，只从正样本包里挑选被预测的“最像正确”(也就是分类得分最高)的那一个，正样本包里面<strong>其他的</strong>样本，不管预测出来是正的还是负的<strong>都不要了</strong>。这是因为，其实多示例的问题也可以描述为，正样本包里面“最正确”的一个样本标记是正的，跟其他样本无关。所以，这种选择策略恰恰是符合问题定义的。<strong>（选最容易分类的，因为可能只有一个）</strong></li>
+<li>第二点，如果负样本足够多的话，可以只挑选每个负样本包里面被预测“最像正确"的一个样本作为负样本进行训练，这样子的负样本也叫做hard
+sample或者most violated
+sample。实践上来说，它们对于模型快速收敛是最有效的。<strong>（选最难分类的，因为所有样本都是负的，并且要使模型能够有区分度，这种观点可以参考支持向量机中的支持向量的观点）</strong><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
 </ol>
 <p>因此，对于一个经典的MIL问题，通常的算法实现过程分为如下步骤：</p>
 <p>多示例学习：</p>
 <p>输入：正包，负包</p>
-<p>输出： 分类函数 $f$</p>
-<p>将每个标记包中的样本初始化为<strong>包的标记</strong>，初始化集合 $U$ 为空，将所有样本 (instance) 加入样本集 $U$</p>
+<p>输出： 分类函数 <span class="math inline">\(f\)</span></p>
+<p>将每个标记包中的样本初始化为<strong>包的标记</strong>，初始化集合
+<span class="math inline">\(U\)</span> 为空，将所有样本 (instance)
+加入样本集 <span class="math inline">\(U\)</span></p>
 <p>重复下面的过程：</p>
 <ul>
-<li>取 $U$ 中所有样本 $s_i$ 以及标记 $y$ 训练得到一个分类函数 $f$</li>
-<li>利用 $f$ 预测所有样本的标记 $\hat{y}$</li>
-<li>清空 $U$</li>
-<li>对于每个正标记包，选取 $f$ 预测得分最高的样本 $s_{p_max}$ 加入集合 $U$（选最容易分类的一个）</li>
-<li>对于每个负标记包，选取 $f$ 预测得分最高的样本 $s_{n_max}$ 加入集合 $U$（选最难分类的一个或多个）</li>
+<li>取 <span class="math inline">\(U\)</span> 中所有样本 <span class="math inline">\(s_i\)</span> 以及标记 <span class="math inline">\(y\)</span> 训练得到一个分类函数 <span class="math inline">\(f\)</span></li>
+<li>利用 <span class="math inline">\(f\)</span> 预测所有样本的标记 <span class="math inline">\(\hat{y}\)</span></li>
+<li>清空 <span class="math inline">\(U\)</span></li>
+<li>对于每个正标记包，选取 <span class="math inline">\(f\)</span>
+预测得分最高的样本 <span class="math inline">\(s_{p\_max}\)</span>
+加入集合 <span class="math inline">\(U\)</span>（选最容易分类的一个）</li>
+<li>对于每个负标记包，选取 <span class="math inline">\(f\)</span>
+预测得分最高的样本 <span class="math inline">\(s_{n\_max}\)</span>
+加入集合 <span class="math inline">\(U\)</span>（选最难分类的一个或多个）</li>
 </ul>
-<p>直到 $U$ 中不包含正样本为止.</p>
-<p>返回 $f$.</p>
-<p>从以上一般MIL的求解范式来看，示例（instance, 以上称为样本，为方便讨论以下将其称为“示例”）需要满足几个特征才适合于以上迭代优化的模式：</p>
+<p>直到 <span class="math inline">\(U\)</span> 中不包含正样本为止.</p>
+<p>返回 <span class="math inline">\(f\)</span>.</p>
+<p>从以上一般MIL的求解范式来看，示例（instance,
+以上称为样本，为方便讨论以下将其称为“示例”）需要满足几个特征才适合于以上迭代优化的模式：</p>
 <ul>
-<li>Permutation-Invariance. 交换示例的位置不会对打分造成影响（打分与位置无关）</li>
+<li>Permutation-Invariance.
+交换示例的位置不会对打分造成影响（打分与位置无关）</li>
 <li>所有的示例都应当具有相同的权重</li>
 </ul>
-<p>因此，对于视频异常检测任务而言，它可以使用MIL来进行建模，但是构建出的包质量会影响到预测函数 $f$ 的表现。具体而言，用MIL对VAD的建模天然采用一个完整的视频 (video) 作为一个包 (bag) ，视频的部分片段 (clip) 作为示例 (instance) 。但与标准的MIL不同的是，这里的instances之间是具有时序关系的，而且随着采样时间的变化</p>
-<blockquote id="fn_1">
-<sup>1</sup>. <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/377220948">https://zhuanlan.zhihu.com/p/377220948</a><a href="#reffn_1" title="Jump back to footnote [1] in the text."> &#8617;</a>
-</blockquote>
+<p>因此，对于视频异常检测任务而言，它可以使用MIL来进行建模，但是构建出的包质量会影响到预测函数
+<span class="math inline">\(f\)</span>
+的表现。具体而言，用MIL对VAD的建模天然采用一个完整的视频 (video)
+作为一个包 (bag) ，视频的部分片段 (clip) 作为示例 (instance)
+。直接用MIL对VAD任务建模存在一些重要问题：</p>
+<ol type="1">
+<li>与标准的MIL不同的是，<strong>VAD的instances之间是具有时序关系的</strong>，而且随着采样时间长度的变化，示例的低维度特征也在变。</li>
+<li>可能会对MIL模型造成致命影响的是对视频异常的定义：被定义为异常的片段通常是<strong>若干个连续示例</strong>（视频片段）的组合。<strong>其中的任何一个示例</strong>对上述分类器
+<span class="math inline">\(f\)</span>
+而言都<strong>不会</strong>被训练为正标记。如果增加示例长度的采样长度，一方面会使数据集的示例量总体减少，损失细节信息；另一方面会使得模型在正向推理的过程中只能对更粗粒度的视频片段作出预测。</li>
+</ol>
+<p>因此，对VAD进行简单的MIL建模是存在重要缺陷的。</p>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>https://zhuanlan.zhihu.com/p/377220948<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>https://zhuanlan.zhihu.com/p/377220948<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
 </div></article></div><div id="disqus_thread"></div></div><script>var disqus_shortname = 'hankislolo';
 var disqus_identifier = '2022/12/07/VAD-Research-Logs/';
 var disqus_title = 'VAD Research Logs';
