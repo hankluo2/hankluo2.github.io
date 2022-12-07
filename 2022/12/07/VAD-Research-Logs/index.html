@@ -27,9 +27,13 @@ sample。实践上来说，它们对于模型快速收敛是最有效的。<stro
 <span class="math inline">\(U\)</span> 为空，将所有样本 (instance)
 加入样本集 <span class="math inline">\(U\)</span></p>
 <p>重复下面的过程：</p>
-<ul>
-<li>取 <span class="math inline">\(U\)</span> 中所有样本 <span class="math inline">\(s_i\)</span> 以及标记 <span class="math inline">\(y\)</span> 训练得到一个分类函数 <span class="math inline">\(f\)</span></li>
-<li>利用 <span class="math inline">\(f\)</span> 预测所有样本的标记 <span class="math inline">\(\hat{y}\)</span></li>
+<ol type="1">
+<li>取 <span class="math inline">\(U\)</span>
+中<strong>所有样本</strong> <span class="math inline">\(s_i\)</span>
+以及标记 <span class="math inline">\(y\)</span> 训练得到一个分类函数
+<span class="math inline">\(f\)</span> （注：所有样本指数据集层面）</li>
+<li>利用 <span class="math inline">\(f\)</span>
+预测<strong>所有样本</strong>的标记 <span class="math inline">\(\hat{y}\)</span></li>
 <li>清空 <span class="math inline">\(U\)</span></li>
 <li>对于每个正标记包，选取 <span class="math inline">\(f\)</span>
 预测得分最高的样本 <span class="math inline">\(s_{p\_max}\)</span>
@@ -37,9 +41,13 @@ sample。实践上来说，它们对于模型快速收敛是最有效的。<stro
 <li>对于每个负标记包，选取 <span class="math inline">\(f\)</span>
 预测得分最高的样本 <span class="math inline">\(s_{n\_max}\)</span>
 加入集合 <span class="math inline">\(U\)</span>（选最难分类的一个或多个）</li>
-</ul>
+</ol>
 <p>直到 <span class="math inline">\(U\)</span> 中不包含正样本为止.</p>
 <p>返回 <span class="math inline">\(f\)</span>.</p>
+<p>在迭代循环的过程中，1~3为迭代推理阶段，4~5为池化阶段 (Pooling)
+。<del>池化操作会丢失大量的不必要数据。以以上方法为例，池化采用top-1则每一轮迭代的样本个数随包的大小指数级下降。在池化开始前，设每个包含有的样本数量大小
+<span class="math inline">\(N\)</span> 相同，<span class="math inline">\(U\)</span> 中的包个数为 <span class="math inline">\(m\)</span> ，则当前参与模型训练的样本 <span class="math inline">\(I\)</span> 的个数为 <span class="math inline">\(N
+\times m\)</span>. 在正负包平衡的状态下，池化操作使得 <span class="math inline">\(U\)</span> 包含的样本个数下降为 <span class="math inline">\(m\)</span>. 如果不能保证 <span class="math inline">\(m &gt;&gt; N\)</span>，</del></p>
 <p>从以上一般MIL的求解范式来看，示例（instance,
 以上称为样本，为方便讨论以下将其称为“示例”）需要满足几个特征才适合于以上迭代优化的模式：</p>
 <ul>
