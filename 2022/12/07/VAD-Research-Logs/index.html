@@ -19,15 +19,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"hankislolo.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="关于视频异常检测的核心问题  在过去的实验研究当中发现视频异常检测的具体实现有很多现实难以解决的问题。但是很多文章声称的具体方法却缺乏代码实现。本文对过去的文献加以介绍并总结，并添加一些实验中发现的问题，以启发后续的工作继续深入。 MIL (Multiple Instance Learning) 的一般方法 VAD可以抽象为一个典型的多示例学习模型。由于感兴趣的正样本视频片段只占一个视频样本的一个">
+    <meta name="description" content="关于视频异常检测的核心问题  在过去的实验研究当中发现视频异常检测的具体实现有很多现实难以解决的问题。但是很多文章声称的具体方法却缺乏代码实现。本文对过去的文献加以介绍并总结，并添加一些实验中发现的问题，以启发后续的工作继续深入。 MIL (Multiple Instance Learning) 的一般方法 对于一个典型的MIL问题，解决这个方法通常为迭代优化（alternative optimi">
 <meta property="og:type" content="article">
 <meta property="og:title" content="VAD Research Logs">
 <meta property="og:url" content="http://hankislolo.com/2022/12/07/VAD-Research-Logs/index.html">
 <meta property="og:site_name" content="Hank Is Lolo">
-<meta property="og:description" content="关于视频异常检测的核心问题  在过去的实验研究当中发现视频异常检测的具体实现有很多现实难以解决的问题。但是很多文章声称的具体方法却缺乏代码实现。本文对过去的文献加以介绍并总结，并添加一些实验中发现的问题，以启发后续的工作继续深入。 MIL (Multiple Instance Learning) 的一般方法 VAD可以抽象为一个典型的多示例学习模型。由于感兴趣的正样本视频片段只占一个视频样本的一个">
+<meta property="og:description" content="关于视频异常检测的核心问题  在过去的实验研究当中发现视频异常检测的具体实现有很多现实难以解决的问题。但是很多文章声称的具体方法却缺乏代码实现。本文对过去的文献加以介绍并总结，并添加一些实验中发现的问题，以启发后续的工作继续深入。 MIL (Multiple Instance Learning) 的一般方法 对于一个典型的MIL问题，解决这个方法通常为迭代优化（alternative optimi">
 <meta property="og:locale">
 <meta property="article:published_time" content="2022-12-07T09:33:16.000Z">
-<meta property="article:modified_time" content="2022-12-08T08:21:51.048Z">
+<meta property="article:modified_time" content="2022-12-08T09:35:34.199Z">
 <meta property="article:author" content="Hank">
 <meta name="twitter:card" content="summary">
 
@@ -132,7 +132,7 @@ Instance Learning) 的一般方法</span></a></li><li class="nav-item nav-level-
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -196,7 +196,7 @@ Instance Learning) 的一般方法</span></a></li><li class="nav-item nav-level-
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-12-08 16:21:51" itemprop="dateModified" datetime="2022-12-08T16:21:51+08:00">2022-12-08</time>
+      <time title="Modified: 2022-12-08 17:35:34" itemprop="dateModified" datetime="2022-12-08T17:35:34+08:00">2022-12-08</time>
     </span>
 
   
@@ -214,9 +214,7 @@ Instance Learning) 的一般方法</span></a></li><li class="nav-item nav-level-
 <p>在过去的实验研究当中发现视频异常检测的具体实现有很多现实难以解决的问题。但是很多文章声称的具体方法却缺乏代码实现。本文对过去的文献加以介绍并总结，并添加一些实验中发现的问题，以启发后续的工作继续深入。</p>
 <h4 id="mil-multiple-instance-learning-的一般方法">MIL (Multiple
 Instance Learning) 的一般方法</h4>
-<p>VAD可以抽象为一个典型的多示例学习模型。由于感兴趣的正样本视频片段只占一个视频样本的一个小部分，因此可以将一个视频当作一个包
-(bag) ，每个包根据是否含有正片段示例 (instance)
-给定一个粗粒度的标签。对于一个典型的MIL问题，解决这个方法通常为<strong>迭代优化（alternative
+<p>对于一个典型的MIL问题，解决这个方法通常为<strong>迭代优化（alternative
 optimization)。</strong>也就是说，我们先假设已经知道了所有样本的标记，那么就可以通过某种监督学习的方法得到一个分类模型，通过这个模型我们可以对每个训练样本进行预测，然后更新它们的标记，我们又可以拿这一次新得到的标记重新训练分类模型了。所以整个优化过程分为两部分：监督学习，标记更新<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>。值得注意的是，在训练的过程中：</p>
 <ol type="1">
 <li>第一点，
@@ -257,27 +255,37 @@ sample。实践上来说，它们对于模型快速收敛是最有效的。<stro
 <p><del>池化操作会丢失大量的不必要数据。以以上方法为例，池化采用top-1则每一轮迭代的样本个数随包的大小指数级下降。在池化开始前，设每个包含有的样本数量大小
 <span class="math inline">\(N\)</span> 相同，<span class="math inline">\(U\)</span> 中的包个数为 <span class="math inline">\(m\)</span> ，则当前参与模型训练的样本 <span class="math inline">\(I\)</span> 的个数为 <span class="math inline">\(N
 \times m\)</span>. 在正负包平衡的状态下，池化操作使得 <span class="math inline">\(U\)</span> 包含的样本个数下降为 <span class="math inline">\(m\)</span>. 如果不能保证 <span class="math inline">\(m &gt;&gt; N\)</span>，</del></p>
-<p>除了初始化将所有样本全部加入<span class="math inline">\(U\)</span>的情况，每一次迭代训练的正负样本数与池化操作得到的样本总量相同（在本例里，采用最大池化每个包挑选出一个样本作为代表）。</p>
-<p>从以上一般MIL的求解范式来看，示例（instance,
-以上称为样本，为方便讨论以下将其称为“示例”）需要满足几个特征才适合于以上迭代优化的模式：</p>
+<p>除了初始化将所有样本全部加入<span class="math inline">\(U\)</span>的情况，每一次迭代训练的正负样本数与池化操作得到的样本总量相同（在本例里，采用最大池化每个包挑选出一个样本作为代表）。每一次迭代完的模型在推理过程中会对正负包里面的所有样本重新打上0/1标签。</p>
+<p>从以上MIL的一般求解范式来看，MIL具有以下特点：</p>
 <ul>
-<li>Permutation-Invariance.
-交换示例的位置不会对打分造成影响（打分与位置无关）</li>
-<li>所有的示例都应当具有相同的权重</li>
+<li>示例（instance,
+以上称为样本，为方便讨论以下将其称为“示例”）具有Permutation-Invariance特性，即交换示例的位置不会对打分造成影响（打分与位置无关）</li>
+<li>模型的训练过程中“包”的概念被解除，预测模型的输入为单个的示例（更加细的粒度）</li>
+<li><input type="checkbox" disabled>目标预测函数最好对数据分布具有一定程度的先验知识（第一轮选出来的示例代表非常重要，如果选择错误会导致后续的训练也产生错误）</li>
 </ul>
-<p>因此，对于视频异常检测任务而言，它可以使用MIL来进行建模，但是构建出的包质量会影响到预测函数
-<span class="math inline">\(f\)</span>
-的表现。具体而言，用MIL对VAD的建模天然采用一个完整的视频 (video)
-作为一个包 (bag) ，视频的部分片段 (clip) 作为示例 (instance)
-。直接用MIL对VAD任务建模存在一些重要问题：</p>
+<h4 id="vad-不那么mil的mil">VAD: 不那么MIL的MIL</h4>
+<p>VAD可以抽象为一个典型的多示例学习模型。由于感兴趣的正样本视频片段只占一个视频样本的一个小部分，因此可以用一个完整的视频
+(video) 作为一个包 (bag) ，视频的部分片段 (clip) 作为示例
+(instance)，每个包根据是否含有正 (positive) 片段示例给定一个粗粒度的标签
+(bag label)。在最近的研究当中，使用MIL方法解决VAD问题的方法被归为WS-VAD
+(weakly supervised)。直接用MIL对VAD任务建模存在一些重要问题：</p>
 <ol type="1">
-<li>与标准的MIL不同的是，<strong>VAD的instances之间是具有时序关系的</strong>，而且随着采样时间长度的变化，示例的低维度特征也在变。</li>
+<li>构建出的包质量会影响到预测函数 <span class="math inline">\(f\)</span>
+的表现。由于迭代过程中训练集实际上是每一轮从正负包当中选出来的代表，包的数量决定了每一轮迭代的数据量大小。</li>
+<li>与标准的MIL不同的是，<strong>VAD的instances之间是具有时序关系的</strong>，而且随着采样片段长度的变化，示例的低维度特征也在变。</li>
 <li>可能会对MIL模型造成致命影响的是对视频异常的定义：被定义为异常的片段通常是<strong>若干个连续示例</strong>（视频片段）的组合。<strong>其中的任何一个示例</strong>对上述分类器
 <span class="math inline">\(f\)</span>
 而言都<strong>不会</strong>被训练为正标记。如果增加示例长度的采样长度，一方面会使数据集的示例量总体减少，损失细节信息；另一方面会使得模型在正向推理的过程中只能对更粗粒度的视频片段作出预测。</li>
 </ol>
-<p>因此，对VAD进行简单的MIL建模是存在重要缺陷的。</p>
-<h4 id="vad-不那么mil的mil">VAD: 不那么MIL的MIL</h4>
+<p>因此，对VAD进行简单直接的MIL建模是存在重要缺陷的。从以上分析可知，VAD需要解决的问题主要是：</p>
+<ol type="1">
+<li>数据集的大小（需要<strong>数据增强</strong>）</li>
+<li>示例的<strong>语义缺失</strong>（视频片段的<strong>采样方法</strong>的合理性，要么增加片段特征的局部上下文信息——上下文信息融合也很重要）</li>
+<li><strong>池化操作</strong>的合理性（如何选出最合理的代表，max
+pooling和mean
+pooling不能最有代表性地挑选出示例或<strong>示例组合</strong>）</li>
+</ol>
+<p>针对以上问题，若干文章在不同的方向研究了提升VAD性能的方法。表格记录在下一篇文章中。</p>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
@@ -303,6 +311,9 @@ sample。实践上来说，它们对于模型快速收敛是最有效的。<stro
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2022/12/08/VAD-Research-Review/" rel="next" title="VAD Research Review">
+                  VAD Research Review <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>
