@@ -27,7 +27,7 @@
 <meta property="og:description" content="本文档记录VAD的各类解决方案，并对其方法进行归纳。              Title Keyword Idea Pooling Advantages Drawbacks Note Comment     Attention‐based framework for weakly supervised video anomaly detection GAAM, DAAM 双任务结合（异常注意力+">
 <meta property="og:locale">
 <meta property="article:published_time" content="2022-12-08T09:36:46.000Z">
-<meta property="article:modified_time" content="2022-12-08T10:19:28.662Z">
+<meta property="article:modified_time" content="2022-12-09T02:54:05.369Z">
 <meta property="article:author" content="Hank">
 <meta name="twitter:card" content="summary">
 
@@ -130,7 +130,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -186,9 +186,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2022-12-08 17:36:46 / Modified: 18:19:28" itemprop="dateCreated datePublished" datetime="2022-12-08T17:36:46+08:00">2022-12-08</time>
+      <time title="Created: 2022-12-08 17:36:46" itemprop="dateCreated datePublished" datetime="2022-12-08T17:36:46+08:00">2022-12-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-12-09 10:54:05" itemprop="dateModified" datetime="2022-12-09T10:54:05+08:00">2022-12-09</time>
     </span>
 
   
@@ -202,16 +208,16 @@
     
     <div class="post-body" itemprop="articleBody">
         <p>本文档记录VAD的各类解决方案，并对其方法进行归纳。</p>
-<table>
+<table style="width:100%;">
 <colgroup>
-<col style="width: 17%">
-<col style="width: 11%">
-<col style="width: 17%">
-<col style="width: 7%">
+<col style="width: 16%">
+<col style="width: 10%">
+<col style="width: 16%">
+<col style="width: 15%">
 <col style="width: 4%">
-<col style="width: 17%">
-<col style="width: 5%">
-<col style="width: 17%">
+<col style="width: 16%">
+<col style="width: 4%">
+<col style="width: 16%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -230,7 +236,7 @@
 <td><a target="_blank" rel="noopener" href="https://link.springer.com/article/10.1007/s11227-021-04190-9">Attention‐based
 framework for weakly supervised video anomaly detection</a></td>
 <td style="text-align: center;">GAAM, DAAM</td>
-<td>双任务结合（异常注意力+视频特征重构）</td>
+<td><strong>双任务</strong>结合（异常注意力+视频特征重构）</td>
 <td style="text-align: center;"></td>
 <td style="text-align: left;"></td>
 <td></td>
@@ -243,7 +249,8 @@ Multi-Sequence Learning with Transformer for Weakly Supervised Video
 Anomaly Detection</a></td>
 <td style="text-align: center;">MSL</td>
 <td>将Instance改为Sequence，在迭代优化的过程中逐渐减小Sequence的大小，使预测信号在时间域上逐渐分离。使用CTE模块，引入的Conv可以保留局部上下文特征</td>
-<td style="text-align: center;">Sequence-Pooling (Dynamic)</td>
+<td style="text-align: center;"><strong>Sequence-Pooling
+(Dynamic)</strong></td>
 <td style="text-align: left;">自适应的渐变优化</td>
 <td>尚未复现。初步实验发现CTE在全局的训练过程中会让所有的特征分数下降为0或者1（这种现象似乎是正常的？）过程实现很繁琐</td>
 <td>无代码</td>
@@ -255,7 +262,7 @@ Supervised Video Anomaly Detection via Transformer-Enabled Temporal
 Relation Learning</a></td>
 <td style="text-align: center;">Transformer, Temporal Relation
 Learning</td>
-<td>在I3D特征后引入上下文的Transformer自注意力模块，将上下文信息融合到每一个示例的特征（高阶）当中</td>
+<td>在I3D特征后引入上下文的Transformer自注意力模块，将上<strong>下文信息融合</strong>到每一个示例的特征（高阶）当中</td>
 <td style="text-align: center;">mean</td>
 <td style="text-align: left;"></td>
 <td></td>
@@ -263,10 +270,13 @@ Learning</td>
 <td>上下文注意力肯定是合理的，但是它比Conv模块提取局部信息快了多少？</td>
 </tr>
 <tr class="even">
+<td><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2022/papers_ECCV/papers/136640328.pdf">Self-Training
+Multi-Sequence Learning with Transformer for Weakly Supervised Video
+Anomaly Detection</a></td>
+<td style="text-align: center;">PSR (Patch Spatio Relation)</td>
 <td></td>
-<td style="text-align: center;"></td>
-<td></td>
-<td style="text-align: center;"></td>
+<td style="text-align: center;">使用了RTFM的池化方法，选择了top-k
+magnitude （特征二范数）</td>
 <td style="text-align: left;"></td>
 <td></td>
 <td></td>

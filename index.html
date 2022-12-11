@@ -126,7 +126,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -181,9 +181,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2022-12-08 17:36:46 / Modified: 18:19:28" itemprop="dateCreated datePublished" datetime="2022-12-08T17:36:46+08:00">2022-12-08</time>
+      <time title="Created: 2022-12-08 17:36:46" itemprop="dateCreated datePublished" datetime="2022-12-08T17:36:46+08:00">2022-12-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-12-09 10:54:05" itemprop="dateModified" datetime="2022-12-09T10:54:05+08:00">2022-12-09</time>
     </span>
 
   
@@ -197,16 +203,16 @@
     
     <div class="post-body" itemprop="articleBody">
           <p>本文档记录VAD的各类解决方案，并对其方法进行归纳。</p>
-<table>
+<table style="width:100%;">
 <colgroup>
-<col style="width: 17%">
-<col style="width: 11%">
-<col style="width: 17%">
-<col style="width: 7%">
+<col style="width: 16%">
+<col style="width: 10%">
+<col style="width: 16%">
+<col style="width: 15%">
 <col style="width: 4%">
-<col style="width: 17%">
-<col style="width: 5%">
-<col style="width: 17%">
+<col style="width: 16%">
+<col style="width: 4%">
+<col style="width: 16%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -225,7 +231,7 @@
 <td><a target="_blank" rel="noopener" href="https://link.springer.com/article/10.1007/s11227-021-04190-9">Attention‐based
 framework for weakly supervised video anomaly detection</a></td>
 <td style="text-align: center;">GAAM, DAAM</td>
-<td>双任务结合（异常注意力+视频特征重构）</td>
+<td><strong>双任务</strong>结合（异常注意力+视频特征重构）</td>
 <td style="text-align: center;"></td>
 <td style="text-align: left;"></td>
 <td></td>
@@ -238,7 +244,8 @@ Multi-Sequence Learning with Transformer for Weakly Supervised Video
 Anomaly Detection</a></td>
 <td style="text-align: center;">MSL</td>
 <td>将Instance改为Sequence，在迭代优化的过程中逐渐减小Sequence的大小，使预测信号在时间域上逐渐分离。使用CTE模块，引入的Conv可以保留局部上下文特征</td>
-<td style="text-align: center;">Sequence-Pooling (Dynamic)</td>
+<td style="text-align: center;"><strong>Sequence-Pooling
+(Dynamic)</strong></td>
 <td style="text-align: left;">自适应的渐变优化</td>
 <td>尚未复现。初步实验发现CTE在全局的训练过程中会让所有的特征分数下降为0或者1（这种现象似乎是正常的？）过程实现很繁琐</td>
 <td>无代码</td>
@@ -250,7 +257,7 @@ Supervised Video Anomaly Detection via Transformer-Enabled Temporal
 Relation Learning</a></td>
 <td style="text-align: center;">Transformer, Temporal Relation
 Learning</td>
-<td>在I3D特征后引入上下文的Transformer自注意力模块，将上下文信息融合到每一个示例的特征（高阶）当中</td>
+<td>在I3D特征后引入上下文的Transformer自注意力模块，将上<strong>下文信息融合</strong>到每一个示例的特征（高阶）当中</td>
 <td style="text-align: center;">mean</td>
 <td style="text-align: left;"></td>
 <td></td>
@@ -258,10 +265,13 @@ Learning</td>
 <td>上下文注意力肯定是合理的，但是它比Conv模块提取局部信息快了多少？</td>
 </tr>
 <tr class="even">
+<td><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2022/papers_ECCV/papers/136640328.pdf">Self-Training
+Multi-Sequence Learning with Transformer for Weakly Supervised Video
+Anomaly Detection</a></td>
+<td style="text-align: center;">PSR (Patch Spatio Relation)</td>
 <td></td>
-<td style="text-align: center;"></td>
-<td></td>
-<td style="text-align: center;"></td>
+<td style="text-align: center;">使用了RTFM的池化方法，选择了top-k
+magnitude （特征二范数）</td>
 <td style="text-align: left;"></td>
 <td></td>
 <td></td>
@@ -341,7 +351,7 @@ Learning</td>
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-12-08 17:35:34" itemprop="dateModified" datetime="2022-12-08T17:35:34+08:00">2022-12-08</time>
+      <time title="Modified: 2022-12-09 17:39:40" itemprop="dateModified" datetime="2022-12-09T17:39:40+08:00">2022-12-09</time>
     </span>
 
   
@@ -408,6 +418,80 @@ sample。实践上来说，它们对于模型快速收敛是最有效的。<stro
 <li>模型的训练过程中“包”的概念被解除，预测模型的输入为单个的示例（更加细的粒度）</li>
 <li><input type="checkbox" disabled>目标预测函数最好对数据分布具有一定程度的先验知识（第一轮选出来的示例代表非常重要，如果选择错误会导致后续的训练也产生错误）</li>
 </ul>
+<hr>
+<p>chatbot给的MIL伪代码：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">function MIL(instance_groups, labels):</span><br><span class="line"></span><br><span class="line">  for each group, label in zip(instance_groups, labels):</span><br><span class="line">    for instance in group:</span><br><span class="line">      predict_label = classify(instance)</span><br><span class="line">      if predict_label == label:</span><br><span class="line">        # instance is correctly classified</span><br><span class="line">        update_weights(instance, predict_label)</span><br><span class="line">      else:</span><br><span class="line">        # instance is misclassified</span><br><span class="line">        update_weights(instance, label)</span><br><span class="line"></span><br><span class="line">  return classifier</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>该伪代码实现了MIL算法的基本思路。它首先遍历所有的实例组和标签，并对每个实例进行分类。如果预测的标签与真实标签相同，则更新分类器的权重，否则更新实例的权重。最后，它返回训练后的分类器。</p>
+<hr>
+<p>假设你使用的是MLP作为MIL模型，每一轮训练输入的是一对正负实例组，并使用最大值函数作为聚合函数，然后用sigmoid函数将聚合结果映射到[0,1]之间。那么，你可以使用Hinge
+Loss作为目标损失函数来进行反向传播，输入目标损失函数的值就是sigmoid函数的输出。</p>
+<p>具体来说，假设你有一个正样本<span class="math inline">\(x_1\)</span>和一个负样本<span class="math inline">\(x_2\)</span>，并将它们合并为一个输入<span class="math inline">\(x\)</span>，那么你可以使用MLP来计算它们的聚合值<span class="math inline">\(y\)</span>，具体来说：</p>
+<p><span class="math inline">\(y = \max({f_{MLP}(x_1),
+f_{MLP}(x_2)})\)</span></p>
+<p>其中<span class="math inline">\(f_{MLP}\)</span>表示MLP模型的输出。然后，你可以使用sigmoid函数来映射<span class="math inline">\(y\)</span>到[0,1]之间，即：</p>
+<p><span class="math inline">\(z = \sigma(y)\)</span></p>
+<p>其中<span class="math inline">\(\sigma\)</span>表示sigmoid函数。最后，你可以使用Hinge
+Loss来计算模型的损失值，具体来说：</p>
+<p><span class="math inline">\(L = \max({0, 1 - z})\)</span></p>
+<p>这里的<span class="math inline">\(L\)</span>表示模型的损失值，<span class="math inline">\(1\)</span>表示正样本的标签，<span class="math inline">\(z\)</span>表示sigmoid函数的输出。</p>
+<h5 id="关于损失函数的选择">关于损失函数的选择</h5>
+<p>指数损失函数是一种用于二分类问题的目标损失函数，它可以用来衡量预测值与真实值之间的差距。指数损失函数的公式如下：</p>
+<p><span class="math display">\[
+L(y, \hat{y}) = \begin{cases} - \log(\hat{y_i}) &amp; \text{if } y_i = 1
+\ - \log(1 - \hat{y_i})  \text{if } y_i = 0 \end{cases}
+\]</span></p>
+<p>在进行基于MIL的视频异常检测时，需要选择一个合适的聚合函数来对多个数据集的预测结果进行聚合。常用的聚合函数包括平均值聚合函数、加权平均值聚合函数和最大值聚合函数等。</p>
+<p>平均值聚合函数是一种常用的聚合函数，它将多个数据集的预测结果求平均值。平均值聚合函数的公式如下：</p>
+<p><span class="math inline">\(f(y_1, y_2, \dots, y_n) = \frac{1}{n}
+\sum_{i=1}^{n} y_i\)</span></p>
+<p>其中，<span class="math inline">\(y_1, y_2, \dots, y_n\)</span>
+是多个数据集的预测结果，<span class="math inline">\(n\)</span>
+是数据集的数量。</p>
+<p>加权平均值聚合函数是另一种常用的聚合函数，它将多个数据集的预测结果按照一定的权重进行加权平均。加权平均值聚合函数的公式如下：</p>
+<p><span class="math inline">\(f(y_1, y_2, \dots, y_n) =
+\frac{\sum_{i=1}^{n} w_i y_i}{\sum_{i=1}^{n} w_i}\)</span></p>
+<p>其中，<span class="math inline">\(y_1, y_2, \dots, y_n\)</span>
+是多个数据集的预测结果，<span class="math inline">\(w_1, w_2, \dots,
+w_n\)</span> 是数据集的权重，<span class="math inline">\(n\)</span>
+是数据集的数量。</p>
+<p>取最大值聚合函数的公式如下：</p>
+<p><span class="math inline">\(f(y_1, y_2, \dots, y_n) = \max(y_1, y_2,
+\dots, y_n)\)</span></p>
+<p>其中，<span class="math inline">\(y_1, y_2, \dots, y_n\)</span>
+是多个数据集的预测结果，<span class="math inline">\(n\)</span>
+是数据集的数量。</p>
+<p>需要注意的是，在使用Hinge
+Loss作为目标损失函数时，还需要考虑其它因素，比如样本权重、正负样本比例等。</p>
+<p>具体来说，对于一个样本<span class="math inline">\(x\)</span>，如果它是正样本，那么其权重<span class="math inline">\(w_x\)</span>可以设为1；如果它是负样本，那么其权重<span class="math inline">\(w_x\)</span>可以设为正负样本比例的倒数，即<span class="math inline">\(w_x = \frac{1}{p}\)</span>，其中<span class="math inline">\(p\)</span>表示正负样本比例。这样可以确保正负样本在训练过程中贡献的损失值相等。</p>
+<p>同时，需要注意的是，使用Hinge
+Loss作为目标损失函数时，可能会出现梯度消失或爆炸的问题。因此，在使用Hinge
+Loss时，需要注意模型的参数初始化方式，并选择合适的优化算法，以避免梯度消失或爆炸的问题。</p>
+<p>总之，在使用Hinge
+Loss作为目标损失函数时，需要注意样本权重、正负样本比例以及梯度消失或爆炸的问题。</p>
+<p>除了Hinge
+Loss之外，还可以使用其它的损失函数作为目标损失函数，例如交叉熵损失（Cross-Entropy
+Loss）、平方损失（Square Loss）、指数损失（Exponential Loss）等。</p>
+<p>具体来说，对于一个样本<span class="math inline">\(x\)</span>，如果它是正样本，那么其权重<span class="math inline">\(w_x\)</span>可以设为1；如果它是负样本，那么其权重<span class="math inline">\(w_x\)</span>可以设为正负样本比例的倒数，即<span class="math inline">\(w_x = \frac{1}{p}\)</span>，其中<span class="math inline">\(p\)</span>表示正负样本比例。然后，可以使用如下方法来计算损失值：</p>
+<ul>
+<li>交叉熵损失：<span class="math inline">\(L_x = -w_x
+\log{z_x}\)</span>，其中<span class="math inline">\(z_x\)</span>表示模型对样本<span class="math inline">\(x\)</span>的预测值。</li>
+<li>平方损失：<span class="math inline">\(L_x = w_x (1 -
+z_x)^2\)</span>，其中<span class="math inline">\(z_x\)</span>表示模型对样本<span class="math inline">\(x\)</span>的预测值。</li>
+<li>指数损失：<span class="math inline">\(L_x = w_x \exp{(1 -
+z_x)}\)</span>，其中<span class="math inline">\(z_x\)</span>表示模型对样本<span class="math inline">\(x\)</span>的预测值。</li>
+</ul>
+<p>上面的损失函数是常用的目标损失函数，但并不是唯一的选择。根据实际情况，可以选择合适的目标损失函数，以便更好地拟合模型。</p>
+<p>另外，需要注意的是，在使用不同的目标损失函数时，可能会出现梯度消失或爆炸的问题。因此，在使用损失函数时，需要注意模型的参数初始化方式，并选择合适的优化算法，以避免梯度消失或爆炸的问题。</p>
+<p>在采用高斯分布对实例组进行预处理时，预处理阶段应当发生在实例送入 MIL
+模型之前。这是因为，预处理阶段的目的是对实例组进行标准化，以便更好地送入
+MIL 模型进行处理。</p>
+<p>采用高斯分布进行预处理的流程可以简述如下：首先，计算实例组的均值和标准差；然后，使用均值和标准差对实例组进行标准化，即将实例组的每个实例减去均值，再除以标准差；最后，将标准化后的实例组送入
+MIL 模型进行处理。</p>
+<p>另外，在实例组送入 MIL 模型之后，你也可以使用高斯分布对 MIL
+模型的激活值进行预处理。这样做的目的是让激活值更好地拟合高斯分布，从而更好地适应
+MIL 模型的处理逻辑。但是，这种方法的精度可能比送入 MIL
+模型之前的预处理方法低一些，因为在 MIL
+模型的处理过程中可能会丢失一些信息。</p>
 <h4 id="vad-不那么mil的mil">VAD: 不那么MIL的MIL</h4>
 <p>VAD可以抽象为一个典型的多示例学习模型。由于感兴趣的正样本视频片段只占一个视频样本的一个小部分，因此可以用一个完整的视频
 (video) 作为一个包 (bag) ，视频的部分片段 (clip) 作为示例
@@ -438,76 +522,6 @@ pooling不能最有代表性地挑选出示例或<strong>示例组合</strong>�
 <li id="fn2"><p>https://zhuanlan.zhihu.com/p/377220948<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://hankislolo.com/2022/12/07/Say-Hi-to-Roxy/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hank">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hank Is Lolo">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Hank Is Lolo">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/12/07/Say-Hi-to-Roxy/" class="post-title-link" itemprop="url">Say Hi to Roxy</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2022-12-07 13:36:06 / Modified: 23:52:34" itemprop="dateCreated datePublished" datetime="2022-12-07T13:36:06+08:00">2022-12-07</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>Hello, Roxy! This is 4 U! Hank is Lolo.</p>
 
       
     </div>

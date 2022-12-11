@@ -27,7 +27,7 @@
 <meta property="og:description" content="关于视频异常检测的核心问题  在过去的实验研究当中发现视频异常检测的具体实现有很多现实难以解决的问题。但是很多文章声称的具体方法却缺乏代码实现。本文对过去的文献加以介绍并总结，并添加一些实验中发现的问题，以启发后续的工作继续深入。 MIL (Multiple Instance Learning) 的一般方法 对于一个典型的MIL问题，解决这个方法通常为迭代优化（alternative optimi">
 <meta property="og:locale">
 <meta property="article:published_time" content="2022-12-07T09:33:16.000Z">
-<meta property="article:modified_time" content="2022-12-08T09:35:34.199Z">
+<meta property="article:modified_time" content="2022-12-09T09:39:40.244Z">
 <meta property="article:author" content="Hank">
 <meta name="twitter:card" content="summary">
 
@@ -119,7 +119,7 @@
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
             <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E8%A7%86%E9%A2%91%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B%E7%9A%84%E6%A0%B8%E5%BF%83%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">关于视频异常检测的核心问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#mil-multiple-instance-learning-%E7%9A%84%E4%B8%80%E8%88%AC%E6%96%B9%E6%B3%95"><span class="nav-number">1.1.</span> <span class="nav-text">MIL (Multiple
-Instance Learning) 的一般方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vad-%E4%B8%8D%E9%82%A3%E4%B9%88mil%E7%9A%84mil"><span class="nav-number">1.2.</span> <span class="nav-text">VAD: 不那么MIL的MIL</span></a></li></ol></li></ol></div>
+Instance Learning) 的一般方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0%E7%9A%84%E9%80%89%E6%8B%A9"><span class="nav-number">1.1.1.</span> <span class="nav-text">关于损失函数的选择</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vad-%E4%B8%8D%E9%82%A3%E4%B9%88mil%E7%9A%84mil"><span class="nav-number">1.2.</span> <span class="nav-text">VAD: 不那么MIL的MIL</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -132,7 +132,7 @@ Instance Learning) 的一般方法</span></a></li><li class="nav-item nav-level-
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -196,7 +196,7 @@ Instance Learning) 的一般方法</span></a></li><li class="nav-item nav-level-
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-12-08 17:35:34" itemprop="dateModified" datetime="2022-12-08T17:35:34+08:00">2022-12-08</time>
+      <time title="Modified: 2022-12-09 17:39:40" itemprop="dateModified" datetime="2022-12-09T17:39:40+08:00">2022-12-09</time>
     </span>
 
   
@@ -263,6 +263,80 @@ sample。实践上来说，它们对于模型快速收敛是最有效的。<stro
 <li>模型的训练过程中“包”的概念被解除，预测模型的输入为单个的示例（更加细的粒度）</li>
 <li><input type="checkbox" disabled>目标预测函数最好对数据分布具有一定程度的先验知识（第一轮选出来的示例代表非常重要，如果选择错误会导致后续的训练也产生错误）</li>
 </ul>
+<hr>
+<p>chatbot给的MIL伪代码：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">function MIL(instance_groups, labels):</span><br><span class="line"></span><br><span class="line">  for each group, label in zip(instance_groups, labels):</span><br><span class="line">    for instance in group:</span><br><span class="line">      predict_label = classify(instance)</span><br><span class="line">      if predict_label == label:</span><br><span class="line">        # instance is correctly classified</span><br><span class="line">        update_weights(instance, predict_label)</span><br><span class="line">      else:</span><br><span class="line">        # instance is misclassified</span><br><span class="line">        update_weights(instance, label)</span><br><span class="line"></span><br><span class="line">  return classifier</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>该伪代码实现了MIL算法的基本思路。它首先遍历所有的实例组和标签，并对每个实例进行分类。如果预测的标签与真实标签相同，则更新分类器的权重，否则更新实例的权重。最后，它返回训练后的分类器。</p>
+<hr>
+<p>假设你使用的是MLP作为MIL模型，每一轮训练输入的是一对正负实例组，并使用最大值函数作为聚合函数，然后用sigmoid函数将聚合结果映射到[0,1]之间。那么，你可以使用Hinge
+Loss作为目标损失函数来进行反向传播，输入目标损失函数的值就是sigmoid函数的输出。</p>
+<p>具体来说，假设你有一个正样本<span class="math inline">\(x_1\)</span>和一个负样本<span class="math inline">\(x_2\)</span>，并将它们合并为一个输入<span class="math inline">\(x\)</span>，那么你可以使用MLP来计算它们的聚合值<span class="math inline">\(y\)</span>，具体来说：</p>
+<p><span class="math inline">\(y = \max({f_{MLP}(x_1),
+f_{MLP}(x_2)})\)</span></p>
+<p>其中<span class="math inline">\(f_{MLP}\)</span>表示MLP模型的输出。然后，你可以使用sigmoid函数来映射<span class="math inline">\(y\)</span>到[0,1]之间，即：</p>
+<p><span class="math inline">\(z = \sigma(y)\)</span></p>
+<p>其中<span class="math inline">\(\sigma\)</span>表示sigmoid函数。最后，你可以使用Hinge
+Loss来计算模型的损失值，具体来说：</p>
+<p><span class="math inline">\(L = \max({0, 1 - z})\)</span></p>
+<p>这里的<span class="math inline">\(L\)</span>表示模型的损失值，<span class="math inline">\(1\)</span>表示正样本的标签，<span class="math inline">\(z\)</span>表示sigmoid函数的输出。</p>
+<h5 id="关于损失函数的选择">关于损失函数的选择</h5>
+<p>指数损失函数是一种用于二分类问题的目标损失函数，它可以用来衡量预测值与真实值之间的差距。指数损失函数的公式如下：</p>
+<p><span class="math display">\[
+L(y, \hat{y}) = \begin{cases} - \log(\hat{y_i}) &amp; \text{if } y_i = 1
+\ - \log(1 - \hat{y_i})  \text{if } y_i = 0 \end{cases}
+\]</span></p>
+<p>在进行基于MIL的视频异常检测时，需要选择一个合适的聚合函数来对多个数据集的预测结果进行聚合。常用的聚合函数包括平均值聚合函数、加权平均值聚合函数和最大值聚合函数等。</p>
+<p>平均值聚合函数是一种常用的聚合函数，它将多个数据集的预测结果求平均值。平均值聚合函数的公式如下：</p>
+<p><span class="math inline">\(f(y_1, y_2, \dots, y_n) = \frac{1}{n}
+\sum_{i=1}^{n} y_i\)</span></p>
+<p>其中，<span class="math inline">\(y_1, y_2, \dots, y_n\)</span>
+是多个数据集的预测结果，<span class="math inline">\(n\)</span>
+是数据集的数量。</p>
+<p>加权平均值聚合函数是另一种常用的聚合函数，它将多个数据集的预测结果按照一定的权重进行加权平均。加权平均值聚合函数的公式如下：</p>
+<p><span class="math inline">\(f(y_1, y_2, \dots, y_n) =
+\frac{\sum_{i=1}^{n} w_i y_i}{\sum_{i=1}^{n} w_i}\)</span></p>
+<p>其中，<span class="math inline">\(y_1, y_2, \dots, y_n\)</span>
+是多个数据集的预测结果，<span class="math inline">\(w_1, w_2, \dots,
+w_n\)</span> 是数据集的权重，<span class="math inline">\(n\)</span>
+是数据集的数量。</p>
+<p>取最大值聚合函数的公式如下：</p>
+<p><span class="math inline">\(f(y_1, y_2, \dots, y_n) = \max(y_1, y_2,
+\dots, y_n)\)</span></p>
+<p>其中，<span class="math inline">\(y_1, y_2, \dots, y_n\)</span>
+是多个数据集的预测结果，<span class="math inline">\(n\)</span>
+是数据集的数量。</p>
+<p>需要注意的是，在使用Hinge
+Loss作为目标损失函数时，还需要考虑其它因素，比如样本权重、正负样本比例等。</p>
+<p>具体来说，对于一个样本<span class="math inline">\(x\)</span>，如果它是正样本，那么其权重<span class="math inline">\(w_x\)</span>可以设为1；如果它是负样本，那么其权重<span class="math inline">\(w_x\)</span>可以设为正负样本比例的倒数，即<span class="math inline">\(w_x = \frac{1}{p}\)</span>，其中<span class="math inline">\(p\)</span>表示正负样本比例。这样可以确保正负样本在训练过程中贡献的损失值相等。</p>
+<p>同时，需要注意的是，使用Hinge
+Loss作为目标损失函数时，可能会出现梯度消失或爆炸的问题。因此，在使用Hinge
+Loss时，需要注意模型的参数初始化方式，并选择合适的优化算法，以避免梯度消失或爆炸的问题。</p>
+<p>总之，在使用Hinge
+Loss作为目标损失函数时，需要注意样本权重、正负样本比例以及梯度消失或爆炸的问题。</p>
+<p>除了Hinge
+Loss之外，还可以使用其它的损失函数作为目标损失函数，例如交叉熵损失（Cross-Entropy
+Loss）、平方损失（Square Loss）、指数损失（Exponential Loss）等。</p>
+<p>具体来说，对于一个样本<span class="math inline">\(x\)</span>，如果它是正样本，那么其权重<span class="math inline">\(w_x\)</span>可以设为1；如果它是负样本，那么其权重<span class="math inline">\(w_x\)</span>可以设为正负样本比例的倒数，即<span class="math inline">\(w_x = \frac{1}{p}\)</span>，其中<span class="math inline">\(p\)</span>表示正负样本比例。然后，可以使用如下方法来计算损失值：</p>
+<ul>
+<li>交叉熵损失：<span class="math inline">\(L_x = -w_x
+\log{z_x}\)</span>，其中<span class="math inline">\(z_x\)</span>表示模型对样本<span class="math inline">\(x\)</span>的预测值。</li>
+<li>平方损失：<span class="math inline">\(L_x = w_x (1 -
+z_x)^2\)</span>，其中<span class="math inline">\(z_x\)</span>表示模型对样本<span class="math inline">\(x\)</span>的预测值。</li>
+<li>指数损失：<span class="math inline">\(L_x = w_x \exp{(1 -
+z_x)}\)</span>，其中<span class="math inline">\(z_x\)</span>表示模型对样本<span class="math inline">\(x\)</span>的预测值。</li>
+</ul>
+<p>上面的损失函数是常用的目标损失函数，但并不是唯一的选择。根据实际情况，可以选择合适的目标损失函数，以便更好地拟合模型。</p>
+<p>另外，需要注意的是，在使用不同的目标损失函数时，可能会出现梯度消失或爆炸的问题。因此，在使用损失函数时，需要注意模型的参数初始化方式，并选择合适的优化算法，以避免梯度消失或爆炸的问题。</p>
+<p>在采用高斯分布对实例组进行预处理时，预处理阶段应当发生在实例送入 MIL
+模型之前。这是因为，预处理阶段的目的是对实例组进行标准化，以便更好地送入
+MIL 模型进行处理。</p>
+<p>采用高斯分布进行预处理的流程可以简述如下：首先，计算实例组的均值和标准差；然后，使用均值和标准差对实例组进行标准化，即将实例组的每个实例减去均值，再除以标准差；最后，将标准化后的实例组送入
+MIL 模型进行处理。</p>
+<p>另外，在实例组送入 MIL 模型之后，你也可以使用高斯分布对 MIL
+模型的激活值进行预处理。这样做的目的是让激活值更好地拟合高斯分布，从而更好地适应
+MIL 模型的处理逻辑。但是，这种方法的精度可能比送入 MIL
+模型之前的预处理方法低一些，因为在 MIL
+模型的处理过程中可能会丢失一些信息。</p>
 <h4 id="vad-不那么mil的mil">VAD: 不那么MIL的MIL</h4>
 <p>VAD可以抽象为一个典型的多示例学习模型。由于感兴趣的正样本视频片段只占一个视频样本的一个小部分，因此可以用一个完整的视频
 (video) 作为一个包 (bag) ，视频的部分片段 (clip) 作为示例
@@ -306,9 +380,6 @@ pooling不能最有代表性地挑选出示例或<strong>示例组合</strong>�
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2022/12/07/Say-Hi-to-Roxy/" rel="prev" title="Say Hi to Roxy">
-                  <i class="fa fa-chevron-left"></i> Say Hi to Roxy
-                </a>
             </div>
             <div class="post-nav-item">
                 <a href="/2022/12/08/VAD-Research-Review/" rel="next" title="VAD Research Review">
