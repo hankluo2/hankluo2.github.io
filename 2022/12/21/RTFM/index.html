@@ -19,27 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"hankislolo.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="本文档记录VAD的各类解决方案，并对其方法进行归纳。              Title Keyword Idea Pooling Advantages Drawbacks Note Comment     Attention‐based framework for weakly supervised video anomaly detection GAAM, DAAM 双任务结合（异常注意力+">
+    <meta name="description" content="RTFM: Robust Temporal Feature Magnitude Learning 该篇文章是以MIL作为WS-VAD框架中效果最好的一篇，结合了对比学习和注意力机制，在理论层面上说明了MIL框架应当注意的问题。在阅读论文的过程中，我总结出以下问题，是该篇文章尚未说明白或者我还没有理解的。 关于聚合方法 2020年来自澳大利亚的团队研究的结果证明，在视频异常检测任务上，抽取top-k">
 <meta property="og:type" content="article">
-<meta property="og:title" content="VAD Research Review">
-<meta property="og:url" content="http://hankislolo.com/2022/12/08/VAD-Research-Review/index.html">
+<meta property="og:title" content="RTFM">
+<meta property="og:url" content="http://hankislolo.com/2022/12/21/RTFM/index.html">
 <meta property="og:site_name" content="Hank Is Lolo">
-<meta property="og:description" content="本文档记录VAD的各类解决方案，并对其方法进行归纳。              Title Keyword Idea Pooling Advantages Drawbacks Note Comment     Attention‐based framework for weakly supervised video anomaly detection GAAM, DAAM 双任务结合（异常注意力+">
+<meta property="og:description" content="RTFM: Robust Temporal Feature Magnitude Learning 该篇文章是以MIL作为WS-VAD框架中效果最好的一篇，结合了对比学习和注意力机制，在理论层面上说明了MIL框架应当注意的问题。在阅读论文的过程中，我总结出以下问题，是该篇文章尚未说明白或者我还没有理解的。 关于聚合方法 2020年来自澳大利亚的团队研究的结果证明，在视频异常检测任务上，抽取top-k">
 <meta property="og:locale">
-<meta property="article:published_time" content="2022-12-08T09:36:46.000Z">
-<meta property="article:modified_time" content="2022-12-09T02:54:05.369Z">
+<meta property="article:published_time" content="2022-12-21T10:33:30.000Z">
+<meta property="article:modified_time" content="2022-12-21T14:18:05.403Z">
 <meta property="article:author" content="Hank">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://hankislolo.com/2022/12/08/VAD-Research-Review/">
+<link rel="canonical" href="http://hankislolo.com/2022/12/21/RTFM/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh","comments":true,"permalink":"http://hankislolo.com/2022/12/08/VAD-Research-Review/","path":"2022/12/08/VAD-Research-Review/","title":"VAD Research Review"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh","comments":true,"permalink":"http://hankislolo.com/2022/12/21/RTFM/","path":"2022/12/21/RTFM/","title":"RTFM"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>VAD Research Review | Hank Is Lolo</title>
+<title>RTFM | Hank Is Lolo</title>
   
 
 
@@ -105,7 +105,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           Table of Contents
@@ -118,6 +118,8 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#rtfm-robust-temporal-feature-magnitude-learning"><span class="nav-number">1.</span> <span class="nav-text">RTFM: Robust
+Temporal Feature Magnitude Learning</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E8%81%9A%E5%90%88%E6%96%B9%E6%B3%95"><span class="nav-number">1.0.1.</span> <span class="nav-text">关于聚合方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0%E7%9A%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.0.2.</span> <span class="nav-text">对比学习的设计</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.0.3.</span> <span class="nav-text">编码器的设计</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#todo"><span class="nav-number">1.0.4.</span> <span class="nav-text">TODO：</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -158,7 +160,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh">
-    <link itemprop="mainEntityOfPage" href="http://hankislolo.com/2022/12/08/VAD-Research-Review/">
+    <link itemprop="mainEntityOfPage" href="http://hankislolo.com/2022/12/21/RTFM/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -171,12 +173,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="VAD Research Review | Hank Is Lolo">
+      <meta itemprop="name" content="RTFM | Hank Is Lolo">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          VAD Research Review
+          RTFM
         </h1>
 
         <div class="post-meta-container">
@@ -186,15 +188,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
+      
 
-      <time title="Created: 2022-12-08 17:36:46" itemprop="dateCreated datePublished" datetime="2022-12-08T17:36:46+08:00">2022-12-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-12-09 10:54:05" itemprop="dateModified" datetime="2022-12-09T10:54:05+08:00">2022-12-09</time>
+      <time title="Created: 2022-12-21 18:33:30 / Modified: 22:18:05" itemprop="dateCreated datePublished" datetime="2022-12-21T18:33:30+08:00">2022-12-21</time>
     </span>
 
   
@@ -207,93 +203,59 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>本文档记录VAD的各类解决方案，并对其方法进行归纳。</p>
-<table style="width:100%;">
-<colgroup>
-<col style="width: 16%">
-<col style="width: 10%">
-<col style="width: 16%">
-<col style="width: 15%">
-<col style="width: 4%">
-<col style="width: 16%">
-<col style="width: 4%">
-<col style="width: 16%">
-</colgroup>
+        <h2 id="rtfm-robust-temporal-feature-magnitude-learning">RTFM: Robust
+Temporal Feature Magnitude Learning</h2>
+<p>该篇文章是以MIL作为WS-VAD框架中效果最好的一篇，结合了对比学习和注意力机制，在理论层面上说明了MIL框架应当注意的问题。在阅读论文的过程中，我总结出以下问题，是该篇文章尚未说明白或者我还没有理解的。</p>
+<h4 id="关于聚合方法">关于聚合方法</h4>
+<p>2020年来自澳大利亚的团队研究的结果证明，在视频异常检测任务上，抽取top-k个片段组在采样时k的选择会明显影响到模型的收敛。原因是增加正确的片段组可以增加来自于包的有效信息，具体来说，1)
+避免因为聚合时采样过少造成信息损失 2)
+聚合选取的代表片段（若采用max作为聚合函数）错误造成误差累积。但是增加k的值也会让模型失效，原因是采样到的片段无论是来自于正包还是负包都是负实例，模型也就无法区分了。为了保证模型能够区分两类采样结果，应当使采样的k值小于等于真实正片段数<span class="math inline">\(\mu\)</span>。【问题：<span class="math inline">\(\mu\)</span>是如何确定的？】</p>
+<h4 id="对比学习的设计">对比学习的设计</h4>
+<p>另外，该研究采用特征向量的2-范数来定义“feature
+magnitude”，认为经过encoder编码之后的特征向量能够在2-范数上有比较好的区分。作为替代，如果我采用其他的范数或者度量方法（e.g.
+Hansdorff Distance,
+etc,.）为什么不如2-范数好呢（换一个距离度量有效果吗）？在原文中的损失函数的选择上，他们采用了类似于Hinge
+Loss的方法来最大化+/-包的top-k片段组的距离（定义了一个超参margin）来进行对比学习。</p>
+<p>关于距离度量的选择，可以使用PCA可视化来大致观察数据分布的特点。由于对比学习是无监督/弱监督的，仅使用对比学习的方法应当可以使两类包分开，但不一定能使不同标签的片段实例分开。【尝试在<strong>包</strong>/<strong>实例</strong>上都做一下可视化，观察在一定的训练阶段后，正/负样本的分布情况，填入下表】</p>
+<center>
+包/片段特征在训练前后的分布变化，采用n_topk=3进行训练（x10）
+</center>
+<table>
 <thead>
 <tr class="header">
-<th>Title</th>
-<th style="text-align: center;">Keyword</th>
-<th>Idea</th>
-<th style="text-align: center;">Pooling</th>
-<th style="text-align: left;">Advantages</th>
-<th>Drawbacks</th>
-<th>Note</th>
-<th>Comment</th>
+<th>3D动作特征</th>
+<th>编码特征</th>
+<th>编码器及参数</th>
+<th>训练轮次</th>
+<th>距离度量方法</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><a target="_blank" rel="noopener" href="https://link.springer.com/article/10.1007/s11227-021-04190-9">Attention‐based
-framework for weakly supervised video anomaly detection</a></td>
-<td style="text-align: center;">GAAM, DAAM</td>
-<td><strong>双任务</strong>结合（异常注意力+视频特征重构）</td>
-<td style="text-align: center;"></td>
-<td style="text-align: left;"></td>
 <td></td>
-<td>文章未开源，无代码</td>
+<td></td>
+<td></td>
+<td></td>
 <td></td>
 </tr>
 <tr class="even">
-<td><a target="_blank" rel="noopener" href="https://www.aaai.org/AAAI22Papers/AAAI-6637.LiS.pdf">Self-Training
-Multi-Sequence Learning with Transformer for Weakly Supervised Video
-Anomaly Detection</a></td>
-<td style="text-align: center;">MSL</td>
-<td>将Instance改为Sequence，在迭代优化的过程中逐渐减小Sequence的大小，使预测信号在时间域上逐渐分离。使用CTE模块，引入的Conv可以保留局部上下文特征</td>
-<td style="text-align: center;"><strong>Sequence-Pooling
-(Dynamic)</strong></td>
-<td style="text-align: left;">自适应的渐变优化</td>
-<td>尚未复现。初步实验发现CTE在全局的训练过程中会让所有的特征分数下降为0或者1（这种现象似乎是正常的？）过程实现很繁琐</td>
-<td>无代码</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td><a target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/abstract/document/9774889">Weakly
-Supervised Video Anomaly Detection via Transformer-Enabled Temporal
-Relation Learning</a></td>
-<td style="text-align: center;">Transformer, Temporal Relation
-Learning</td>
-<td>在I3D特征后引入上下文的Transformer自注意力模块，将上<strong>下文信息融合</strong>到每一个示例的特征（高阶）当中</td>
-<td style="text-align: center;">mean</td>
-<td style="text-align: left;"></td>
-<td></td>
-<td>未开源</td>
-<td>上下文注意力肯定是合理的，但是它比Conv模块提取局部信息快了多少？</td>
-</tr>
-<tr class="even">
-<td><a target="_blank" rel="noopener" href="https://www.ecva.net/papers/eccv_2022/papers_ECCV/papers/136640328.pdf">Self-Training
-Multi-Sequence Learning with Transformer for Weakly Supervised Video
-Anomaly Detection</a></td>
-<td style="text-align: center;">PSR (Patch Spatio Relation)</td>
-<td></td>
-<td style="text-align: center;">使用了RTFM的池化方法，选择了top-k
-magnitude （特征二范数）</td>
-<td style="text-align: left;"></td>
 <td></td>
 <td></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td></td>
-<td style="text-align: center;"></td>
-<td></td>
-<td style="text-align: center;"></td>
-<td style="text-align: left;"></td>
 <td></td>
 <td></td>
 <td></td>
 </tr>
 </tbody>
 </table>
+<h4 id="编码器的设计">编码器的设计</h4>
+<p>原文对特征的处理比CVPR2018的baseline而言多了多尺度空洞卷积以及自注意力模块，以建模视频事件在时间上的上下文关系。在最近的研究中，采用ConvLSTM或者ConvTransformer的方法也可以达到类似的效果，尤其是在3D动作特征模型锁定不可调的基础上，如果上下文关系非常重要，应该也能work。值得注意的是，RTFM在优化过程中并不是2-stage，而是end-to-end，相当于进行了多任务同时优化。因此后续还需要理解他的片段分类器的实现以及自注意力模块是如何发挥作用的。在整个优化过程中，实例的空间embeding是如何变化的也需要弄明白。</p>
+<hr>
+<h4 id="todo">TODO：</h4>
+<ul class="task-list">
+<li><input type="checkbox" disabled>再次跑通RTFM代码，达到它所声称的效果。</li>
+<li><input type="checkbox" disabled>解构RTFM，把每一步输出的实例片段抽取出来做PCA可视化分析。</li>
+<li><input type="checkbox" disabled>模块的替代性🧪：每个模块用其他的组件去替代，观察实验结果是上升还是下降。</li>
+</ul>
 
     </div>
 
@@ -307,14 +269,11 @@ magnitude （特征二范数）</td>
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2022/12/07/VAD-Research-Logs/" rel="prev" title="VAD Research Logs">
-                  <i class="fa fa-chevron-left"></i> VAD Research Logs
+                <a href="/2022/12/12/Experiment-Chat-with-Bot/" rel="prev" title="Experiment Chat with Bot">
+                  <i class="fa fa-chevron-left"></i> Experiment Chat with Bot
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2022/12/12/Experiment-Chat-with-Bot/" rel="next" title="Experiment Chat with Bot">
-                  Experiment Chat with Bot <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
